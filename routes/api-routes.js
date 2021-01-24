@@ -12,24 +12,25 @@ router.get('/api/workouts', (req, res) => {
     });
 });
 
-router.post("/api/workouts", async (req, res) => {
-    db.Workout.create(req.body)
-    .then((dbWorkout) => {
-        console.log(dbWorkout);
+// POST route => adds new workout to the database
+router.post("api/workouts", (req, res) => {
+    db.Workout.create({})
+      .then((dbWorkout) => {
         res.json(dbWorkout);
-    }).catch((err) => {
+      })
+      .catch((err) => {
         res.json(err);
-    });
-});
+      });
+  });
 
 // updates one workout by adding an exercise
-router.put('/api/workouts/:id', (req, res) => {
-    db.Workout.findByIdAndUpdate(req.params.id, {$push: {exercises: req.body}})
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      res.json(err);
+router.put('/api/workouts/:id', ({body, params}, res) => {
+    db.Workout.findByIdAndUpdate(params.id, {$push: {exercises: body}}, {new: true, runValidators: true})
+    .then((dbWorkout) => {
+        res.json(dbWorkout);
+        })
+        .catch((err) => {
+        res.json(err);
     });
   });
 
