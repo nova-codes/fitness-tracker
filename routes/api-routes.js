@@ -1,5 +1,5 @@
+const router = require('express').Router();
 const db = require('../models');
-const router = require('./html-routes');
 
 // find all the workouts, calculates the total duration
 router.get('/api/workouts', (req, res) => {
@@ -12,7 +12,7 @@ router.get('/api/workouts', (req, res) => {
     });
 });
 
-router.post("/api/workouts", async (req,res) => {
+router.post("/api/workouts", async (req, res) => {
     db.Workout.create(req.body)
     .then((dbWorkout) => {
         console.log(dbWorkout);
@@ -23,19 +23,15 @@ router.post("/api/workouts", async (req,res) => {
 });
 
 // updates one workout by adding an exercise
-router.put('/api/workouts/:id', ({body, params}, res) => {
-    let id = params.id;
-
-    db.Workout.findByIdAndUpdate(id, 
-        { $push: { exercises: body }},
-        { new: true, runValidators: true }
-    ) .then((dbWorkout) => {
-        res.json(dbWorkout);
+router.put('/api/workouts/:id', (req, res) => {
+    db.Workout.findByIdAndUpdate(req.params.id, {$push: {exercises: req.body}})
+    .then(data => {
+      res.json(data);
     })
     .catch(err => {
-        res.json(err);
+      res.json(err);
     });
-});
+  });
 
 // create a new workout
 router.post('/api/workouts/range', (req, res) => {

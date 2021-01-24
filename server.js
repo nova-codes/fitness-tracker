@@ -36,5 +36,5 @@ app.get('/stats', (req, res) => {
 app.use(require('./routes/api-routes.js'));
 
 app.listen(PORT, () => {
-    console.log('Application is listening on port $(PORT)!');
-});
+    console.log(`Application is listening on port ${PORT}!`);
+}); 
